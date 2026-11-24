@@ -1,0 +1,10 @@
+algoritmo teste;
+
+variáveis
+    x: inteiro;
+fim-variáveis
+
+início
+    x := 1;
+    imprima("x vale ", x);
+fim

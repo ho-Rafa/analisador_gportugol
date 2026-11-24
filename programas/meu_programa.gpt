@@ -1,0 +1,15 @@
+algoritmo meu_programa;
+
+variáveis
+    x: inteiro;
+    y: real;
+    w: real;
+fim-variáveis
+
+início
+    x := 10;
+    y := 1.3;
+    w := x + y;
+    imprima("x vale ", x);
+    
+fim

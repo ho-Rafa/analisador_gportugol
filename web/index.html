@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Castelo Semântico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@600;800&family=Pixelify+Sans:wght@400;600&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <canvas id="cena" aria-hidden="true"></canvas>
+
+  <div class="app">
+    <!-- ======================================================== topo -->
+    <header class="topo">
+      <div class="marca"><i class="ic" data-icone="torre"></i><span>G-Portugol Studio</span></div>
+
+      <div class="estandarte">
+        <i class="ic grande" data-icone="torre"></i>
+        <h1>Castelo Semântico</h1>
+        <i class="ic grande" data-icone="torre"></i>
+      </div>
+
+      <nav class="acoes">
+        <button class="botao destaque" id="btn-analisar" title="Analisar (Ctrl+Enter)">
+          <i class="ic" data-icone="espadas"></i> Analisar
+        </button>
+        <button class="botao" id="btn-salvar" title="Salvar (Ctrl+S)">
+          <i class="ic" data-icone="bau"></i> Salvar
+        </button>
+        <button class="botao" id="btn-ajuda" title="Como usar">
+          <i class="ic" data-icone="livro"></i> Leia-me
+        </button>
+      </nav>
+    </header>
+
+    <!-- ======================================================== meio -->
+    <main class="principal">
+      <!-- pergaminho da esquerda: programas -->
+      <aside class="pergaminho esquerdo">
+        <div class="rolo"></div>
+        <div class="miolo">
+          <h2><i class="ic" data-icone="tocha"></i> Programas</h2>
+          <ul id="lista-programas" class="lista-programas"></ul>
+          <button class="link-pergaminho" id="btn-novo">+ novo programa</button>
+          <hr>
+          <button class="item-pergaminho" id="btn-ajuda-2"><i class="ic" data-icone="livro"></i> LEIA-ME</button>
+        </div>
+        <div class="rolo"></div>
+      </aside>
+
+      <!-- centro: editor + console -->
+      <section class="centro">
+        <div class="janela editor-janela">
+          <div class="abas">
+            <div class="aba ativa"><i class="ic" data-icone="pergaminho"></i><span id="nome-aba">programa.gpt</span><b id="marca-sujo" hidden>●</b></div>
+            <div class="dica-abas">Ctrl+Enter analisa · Ctrl+S salva · Esc sai do editor</div>
+          </div>
+          <div class="trilha">castelo › programas › <span id="trilha-arquivo">programa.gpt</span></div>
+          <div class="codigo">
+            <div class="calha"><div class="calha-conteudo" id="calha"></div></div>
+            <div class="area">
+              <div class="faixas" id="faixas"></div>
+              <pre class="realce" id="realce" aria-hidden="true"></pre>
+              <textarea id="editor" spellcheck="false" autocapitalize="off" autocomplete="off"
+                        wrap="off" aria-label="Código G-Portugol"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="console">
+          <div class="console-topo">
+            <span><i class="ic" data-icone="pergaminho"></i> Console / Terminal</span>
+            <span class="fases" id="fases"></span>
+          </div>
+          <div class="console-miolo" id="console" role="log" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- pergaminho da direita: tabela de símbolos -->
+      <aside class="pergaminho direito">
+        <div class="rolo"></div>
+        <div class="miolo">
+          <h2><i class="ic" data-icone="livro"></i> Grimório</h2>
+          <p class="subtitulo">tabela de símbolos</p>
+          <div id="grimorio" class="grimorio"></div>
+        </div>
+        <div class="rolo"></div>
+      </aside>
+    </main>
+
+    <!-- ======================================================== palco do jogo -->
+    <section class="palco" id="palco" aria-label="Fase: cada esqueleto é um erro do programa">
+      <div class="dica-palco">Esc sai do editor · ← → andar · ↑ pular · X atacar · clique num esqueleto para ir ao erro</div>
+      <div class="balao" id="balao" hidden></div>
+      <div class="faixa-vitoria" id="vitoria" hidden>Fase concluída!</div>
+      <div id="etiquetas"></div>
+    </section>
+
+    <!-- ======================================================== barra de status -->
+    <footer class="status">
+      <div class="grupo">
+        <span title="Erros encontrados"><i class="ic" data-icone="caveira"></i> PROBLEMAS: <b id="st-problemas">0</b></span>
+        <span class="sep">/</span>
+        <span title="Avisos (não contam como erro)"><i class="ic" data-icone="sino"></i> AVISOS: <b id="st-avisos">0</b></span>
+      </div>
+      <div class="grupo">
+        <span title="Esqueletos derrotados: erros que você corrigiu"><i class="ic" data-icone="espadas"></i> ABATES: <b id="st-abates">0</b></span>
+        <span class="sep">/</span>
+        <span title="Cada erro tira 10 de vida"><i class="ic" data-icone="coracao"></i> HP: <b id="st-hp">100</b></span>
+        <span class="sep">/</span>
+        <span title="Símbolos na tabela de símbolos"><i class="ic" data-icone="orbe"></i> MANA: <b id="st-mana">0</b></span>
+        <span class="sep">/</span>
+        <span title="Programa aberto"><i class="ic" data-icone="bandeira"></i> FASE: <b id="st-fase">—</b></span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ======================================================== leia-me -->
+  <div class="modal" id="modal-ajuda" hidden>
+    <div class="pergaminho modal-pergaminho" role="dialog" aria-modal="true" aria-labelledby="titulo-ajuda">
+      <div class="rolo"></div>
+      <div class="miolo">
+        <button class="fechar" id="fechar-ajuda" aria-label="Fechar">✕</button>
+        <h2 id="titulo-ajuda"><i class="ic" data-icone="livro"></i> Leia-me</h2>
+
+        <h3>Como jogar</h3>
+        <p>Escreva seu programa em G-Portugol e aperte <kbd>Ctrl</kbd>+<kbd>Enter</kbd> (ou <em>Analisar</em>).
+           Cada erro encontrado vira um <b>esqueleto</b> no corredor lá embaixo. Corrija o código e analise de novo:
+           o cavaleiro derrota os esqueletos dos erros que sumiram. Sem nenhum erro, o portão se abre.</p>
+        <p>Aperte <kbd>Esc</kbd> para sair do editor e controle o cavaleiro com <kbd>←</kbd> <kbd>→</kbd>,
+           <kbd>↑</kbd> (pular) e <kbd>X</kbd> (atacar). Encoste num esqueleto, passe o mouse ou clique nele para ver o erro.</p>
+
+        <h3>O que o analisador verifica</h3>
+        <ol>
+          <li><b>Tabela de símbolos</b>: cada variável, parâmetro e função com seu tipo e escopo (o Grimório).</li>
+          <li><b>Variável ou função não declarada</b>.</li>
+          <li><b>Declaração duplicada</b> no mesmo escopo.</li>
+          <li><b>Compatibilidade de tipos</b>: atribuições, operadores, condições de <code>se</code>/<code>enquanto</code>,
+              índices de matriz, argumentos e retornos de função. Um <code>inteiro</code> pode ir para um <code>real</code>; o contrário não.</li>
+          <li><b>Resultados</b> linha a linha, no console.</li>
+        </ol>
+
+        <h3>Cola de G-Portugol</h3>
+<pre class="cola">algoritmo exemplo;
+
+variáveis
+    x, y: inteiro;
+    nome: literal;
+    notas: matriz[5] de reais;
+fim-variáveis
+
+início
+    x := leia();
+    se x &gt; 0 e x &lt;&gt; 10 então
+        imprima("positivo");
+    senão
+        imprima("outro");
+    fim-se
+    para y de 0 até 4 faça
+        notas[y] := dobro(y);
+    fim-para
+fim
+
+função dobro(n: inteiro) : real
+início
+    retorne n * 2;
+fim</pre>
+
+        <h3>Legenda do Grimório</h3>
+        <ul class="legenda">
+          <li><i class="ic" data-icone="moeda"></i> inteiro</li>
+          <li><i class="ic" data-icone="pocao"></i> real</li>
+          <li><i class="ic" data-icone="runa"></i> caractere</li>
+          <li><i class="ic" data-icone="pergaminho"></i> literal</li>
+          <li><i class="ic" data-icone="chave"></i> lógico</li>
+          <li><i class="ic" data-icone="bau"></i> matriz</li>
+          <li><i class="ic" data-icone="livro"></i> função</li>
+        </ul>
+      </div>
+      <div class="rolo"></div>
+    </div>
+  </div>
+
+  <script src="pixel.js"></script>
+  <script src="cena.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

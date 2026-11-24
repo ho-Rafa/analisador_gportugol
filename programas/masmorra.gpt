@@ -1,0 +1,41 @@
+// Fase desafio: cada erro deste programa vira um esqueleto no castelo!
+algoritmo masmorra;
+
+variáveis
+    vida, ouro: inteiro;
+    nome_heroi: literal;
+    forca: real;
+    vivo: lógico;
+    mochila: matriz[3] de inteiros;
+    ouro: real;
+    tocha: caractere;
+fim-variáveis
+
+início
+    nome_heroi := "Aldric";
+    vida := 100;
+    forca := 7.5;
+    vivo := verdadeiro
+    tocha := 'T';
+
+    vida := forca;
+    ouro := "muito";
+    mochila[5] := 10;
+    mapa := 3;
+
+    se vida então
+        imprima("Ainda de pé, ", nome_heroi);
+    fim-se
+
+    enquanto vivo faça
+        vida := vida - dano(forca, 2);
+        vivo := vida > 0 e nome_heroi;
+    fim-enquanto
+
+    tocha := curar(vida);
+fim
+
+função dano(golpe: real) : inteiro
+início
+    retorne golpe * 2;
+fim

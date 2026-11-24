@@ -1,0 +1,48 @@
+// Calcula a média de uma turma e conta quantos alunos foram aprovados.
+algoritmo media_turma;
+
+variáveis
+    notas: matriz[5] de reais;
+    i, aprovados: inteiro;
+    soma, media: real;
+    turma: literal;
+    tem_aprovado: lógico;
+fim-variáveis
+
+início
+    turma := "Compiladores 2026";
+    soma := 0;
+    aprovados := 0;
+
+    para i de 0 até 4 faça
+        imprima("Digite a nota do aluno ", i + 1, ": ");
+        notas[i] := leia();
+        soma := soma + notas[i];
+        se aprovado(notas[i]) então
+            aprovados := aprovados + 1;
+        fim-se
+    fim-para
+
+    media := soma / 5;
+    tem_aprovado := aprovados > 0;
+
+    imprima("Turma: ", turma);
+    imprima("Média: ", media);
+
+    se tem_aprovado e media >= 6.0 então
+        imprima("Turma aprovada com ", aprovados, " aluno(s) acima da média!");
+    senão
+        imprima("A turma precisa de reforço.");
+    fim-se
+
+    i := 3;
+    enquanto i > 0 faça
+        imprima("Contagem regressiva: ", i);
+        i := i - 1;
+    fim-enquanto
+fim
+
+função aprovado(nota: real) : lógico
+início
+    retorne nota >= 6.0;
+fim

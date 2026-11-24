@@ -1,0 +1,16 @@
+algoritmo cadastro;
+
+variáveis
+    idade: inteiro;
+    salario: real;
+    nome: literal;
+    idade: inteiro;
+fim-variáveis
+
+início
+    idade := 25;
+    salario := 3500.50;
+    nome := "Carlos";
+    idade := "vinte";
+    cidade := "Caceres";
+fim
